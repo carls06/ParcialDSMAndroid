@@ -16,9 +16,10 @@ public class Ejercicio3 extends AppCompatActivity {
     String seleccion;
     Spinner spinner;
     EditText edt1, edt2;
-    ArrayList<String> ArrayListN;
-    ArrayList<String> ArrayListH;
-    ArrayList<String> ArrayListC;
+    //ArrayList<String> ArrayListN;
+    String[] ArrayListN = new String[3];
+    int[] ArrayListH = new int[3];
+    String[] ArrayListC = new String[3];
     int count=0;
     Intent intent;
 
@@ -36,54 +37,67 @@ public class Ejercicio3 extends AppCompatActivity {
         // Apply the adapter to the spinner
          intent = new Intent(this,ListView.class);
         spinner.setAdapter(adapter);
-        ArrayListH = new ArrayList<String>();
-        ArrayListN = new ArrayList<String>();
-        ArrayListC = new ArrayList<String>();
         edt1=findViewById(R.id.edtNombre);
         edt2=findViewById(R.id.edthoras);
+        edt1.setText("");
+        edt2.setText("");
+        seleccion="";
 
 
     }
 
     public void Send(View view) {
         count++;
-        seleccion = spinner.getSelectedItem().toString();
-        String a = String.valueOf(edt1.getText());
-        String b = String.valueOf(edt2.getText());
-        try {
 
+        try {
+            seleccion = spinner.getSelectedItem().toString();
+            String a = String.valueOf(edt1.getText());
+            Integer b = Integer.valueOf(edt2.getText().toString());
             if (count==1){
-                count++;
-                ArrayListN.add(0,a);
-                ArrayListH.add(0,b);
-                ArrayListC.add(0,seleccion);
-                Toast.makeText(getApplicationContext(), "Primer Trabajador Agregado", Toast.LENGTH_SHORT).show();
-                edt1.setText("");
-                edt2.setText("");
-                seleccion="";
+                if(seleccion.equals("Seleccione Cargo")){
+                    Toast.makeText(getApplicationContext(), "Seleccione Cargo", Toast.LENGTH_SHORT).show();
+                    count--;
+                }else {
+                    ArrayListN[0]=a;
+                    ArrayListH[0]=b;
+                    ArrayListC[0]=seleccion;
+                    Toast.makeText(getApplicationContext(), "Primer Trabajador Agregado", Toast.LENGTH_SHORT).show();
+                    edt1.setText("");
+                    edt2.setText("");
+                    seleccion="";
+                }
             }else if (count==2){
-                count++;
-                ArrayListN.add(1,a);
-                ArrayListH.add(1,b);
-                ArrayListC.add(1,seleccion);
+                if(seleccion.equals("Seleccione Cargo")){
+                    Toast.makeText(getApplicationContext(), "Seleccione Cargo", Toast.LENGTH_SHORT).show();
+                    count--;
+                }else {
+                ArrayListN[1]=a;
+                ArrayListH[1]=b;
+                ArrayListC[1]=seleccion;
                 Toast.makeText(getApplicationContext(), "Segundo Trabajador Agregado", Toast.LENGTH_SHORT).show();
                 edt1.setText("");
                 edt2.setText("");
+                seleccion="";
+                }
             }else if (count==3){
-                count=0;
-                ArrayListN.add(2,a);
-                ArrayListH.add(2,b);
-                ArrayListC.add(2,seleccion);
-                Toast.makeText(getApplicationContext(), "Tercer Trabajador Agregado", Toast.LENGTH_SHORT).show();
-                edt1.setText("");
-                edt2.setText("");
+                if(seleccion.equals("Seleccione Cargo")){
+                    Toast.makeText(getApplicationContext(), "Seleccione Cargo", Toast.LENGTH_SHORT).show();
+                    count--;
+                }else {
+                    ArrayListN[2] = a;
+                    ArrayListH[2] = b;
+                    ArrayListC[2] = seleccion;
+
+                    Toast.makeText(getApplicationContext(), "Tercer Trabajador Agregado", Toast.LENGTH_SHORT).show();
+
+                    intent.putExtra("nombre", ArrayListN);
+                    intent.putExtra("cargo", ArrayListC);
+                    intent.putExtra("horas", ArrayListH);
 
 
-                intent.putExtra("nombre",ArrayListN);
-                intent.putExtra("horas",ArrayListH);
-                intent.putExtra("cargo",ArrayListC);
-
-                startActivityForResult(intent,10);
+                    startActivityForResult(intent, 10);
+                    count = 0;
+                }
             }
 
 
@@ -91,7 +105,13 @@ public class Ejercicio3 extends AppCompatActivity {
 
 
         }catch (Exception e){
-             Toast.makeText(getApplicationContext(), "Llenar Los datos Pedidos", Toast.LENGTH_SHORT).show();
+             if (count==0){
+                 count=0;
+                 Toast.makeText(getApplicationContext(), "Llenar Los datos Pedidos", Toast.LENGTH_SHORT).show();
+             }else {
+                 Toast.makeText(getApplicationContext(), "Llenar Los datos Pedidos", Toast.LENGTH_SHORT).show();
+                 count--;
+             }
         }
 
 
